@@ -1,0 +1,9 @@
+# ── Ana Renkler ──────────────────────────────────────────────────────
+main: 0x00F2FF
+
+# ── Durum Renkleri ───────────────────────────────────────────────────
+status:
+  success: 0x00FF9F
+  warn: 0xFFD600
+  error: 0xFF4D4D
+  info: 0xB39DDB
