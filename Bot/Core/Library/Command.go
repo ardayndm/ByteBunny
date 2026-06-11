@@ -11,6 +11,7 @@ type CommandLib struct {
 	Icons       map[string]string `yaml:"icons"`
 	Options     CommandOptions    `yaml:"options"`
 	Fields      []CommandField    `yaml:"fields,omitempty"`
+	Footers     map[string]string `yaml:"footers,omitempty"`
 }
 
 // Komut şablonu içerisindeki Fields alanı şablonu.
@@ -103,7 +104,7 @@ func (c *CommandLib) GetIcon(key, fallback string) string {
 // Komut Seçeneklerini tip dönüştürür.
 func GetOptionsExtraMap[T any](c *CommandLib, key string) (map[string]T, bool) {
 	val, ok := c.Options.Extra[key]
-	
+
 	m, ok := val.(map[string]any)
 	if !ok {
 		return nil, false

@@ -1,5 +1,5 @@
 # ==============================================================================
-# Bot/Modules/Locales/Command.example.yaml
+# Bot/Modules/Locales/tr/Command.example.yaml
 # ==============================================================================
 #
 # Yeni bir komut yazarken bu dosyayı kopyala ve bu yapıyı kullan
@@ -58,6 +58,10 @@ messages:
 icons:
   success: "https://raw.githubusercontent.com/ardayndm/VoidBot/refs/heads/main/icons/<ikon>.png"
 
+# ── Son alt yazı ───────────────────────────────────────────────────────
+# Opsiyonel. ByteBunny • Command    şeklinde yazı için kullanılır.
+footers:
+  default: "Command"
 # ── Ayarlar ───────────────────────────────────────────────────────
 options:
   # Genel — her komutta bulunur

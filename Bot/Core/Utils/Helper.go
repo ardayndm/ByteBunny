@@ -83,3 +83,13 @@ func GetGuildName(s *discordgo.Session, guildID string) (string, error) {
 	}
 	return guild.Name, nil
 }
+
+// Slash komutu 3 saniye içinde cevap vermek zorunda, uzun işlemler için defer gönderir
+func SendInteractionDeferRespond(s *discordgo.Session, i *discordgo.Interaction) {
+	s.InteractionRespond(i, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseDeferredChannelMessageWithSource,
+		Data: &discordgo.InteractionResponseData{
+			Flags: discordgo.MessageFlagsEphemeral,
+		},
+	})
+}

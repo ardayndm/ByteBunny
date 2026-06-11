@@ -118,7 +118,7 @@ templates:
       icon_url: "{bot_avatar_url}"
 
 # ══════════════════════════════════════════════════════════════════
-#  BÖLÜM 3 ▸ KOMUT SİSTEMİ ŞABLONLARI
+#  KOMUT SİSTEMİ ŞABLONLARI
 #  Komutların ortak altyapı durumları için özel embed tasarımları.
 # ══════════════════════════════════════════════════════════════════
 commands:
@@ -178,7 +178,7 @@ commands:
       icon_url: "{bot_avatar_url}"
 
 # ══════════════════════════════════════════════════════════════════
-#  BÖLÜM 4 ▸ VARSAYILAN BAŞLIKLAR
+#  VARSAYILAN BAŞLIKLAR
 #  Komutlar özel başlık sağlamazsa bu değerler kullanılır.
 # ══════════════════════════════════════════════════════════════════
 titles:
@@ -192,7 +192,7 @@ titles:
   db_error: "Veritabanı hatası"
 
 # ══════════════════════════════════════════════════════════════════
-#  BÖLÜM 5 ▸ VARSAYILAN MESAJLAR
+#  VARSAYILAN MESAJLAR
 #  Komutlar özel açıklama sağlamazsa bu değerler kullanılır.
 # ══════════════════════════════════════════════════════════════════
 messages:
@@ -207,7 +207,7 @@ messages:
   content_error: "İçerik hatası"
 
 # ══════════════════════════════════════════════════════════════════
-#  BÖLÜM 6 ▸ ZAMAN BİRİMLERİ
+#  ZAMAN BİRİMLERİ
 #  Süre biçimlendirme fonksiyonları tarafından kullanılır.
 # ══════════════════════════════════════════════════════════════════
 duration:
