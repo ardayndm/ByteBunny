@@ -2,6 +2,7 @@ package main
 
 import (
 	config "ByteBunny/Bot/Config"
+	events "ByteBunny/Bot/Core/Events"
 	general "ByteBunny/Bot/Core/General"
 	library "ByteBunny/Bot/Core/Library"
 	utils "ByteBunny/Bot/Core/Utils"
@@ -44,6 +45,10 @@ func loadAfterBot(s *discordgo.Session) {
 
 	// ── Bot aktivite değiştirici ───────────────────────────────
 	general.StartRandomPresence(s, botName, botPrefix, botLang)
+
+	// ── Discord Mesajı Event Bus ───────────────────────────────
+	s.AddHandler(events.DiscordHandlerBus.PublishMessage)
+	s.AddHandler(events.DiscordHandlerBus.PublishInteraction)
 }
 
 func main() {
