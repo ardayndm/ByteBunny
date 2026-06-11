@@ -1,0 +1,219 @@
+# Bot/Modules/Locales/tr/Common.yaml
+#
+# Bu dosya tüm komutlar tarafından paylaşılan, komuta özel
+# özelleştirme yapılmayan evrensel şablonları tanımlar.
+# Yer tutucu sözdizimi: {key}  →  Go tarafında KeyFormatter() ile doldurulur
+#
+# Go tarafında her embed render edilirken aşağıdaki key'ler
+# otomatik olarak replaceMap'e eklenir:
+#
+#   {bot_name}        → Bot.yaml > name
+#   {bot_avatar_url}  → session.State.User.AvatarURL()
+#   {color_error}     → Colors.yaml > status.error
+#   {color_warning}   → Colors.yaml > status.warning
+#   {color_success}   → Colors.yaml > status.success
+#   {color_info}      → Colors.yaml > status.info
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ══════════════════════════════════════════════════════════════════
+#  İKON URLleri
+#  Go loader'ı bu adresleri okur ve embed'e doğrudan atar.
+#  Placeholder olarak kullanılmaz; sabit URL'dir.
+# ══════════════════════════════════════════════════════════════════
+icons:
+  _base: "https://raw.githubusercontent.com/ardayndm/ByteBunny/refs/heads/main/icons/core"
+
+  error: "{_base}/error.png"
+  warning: "{_base}/warning.png"
+  success: "{_base}/success.png"
+  info: "{_base}/info.png"
+  loading: "{_base}/loading.gif"
+  shield: "{_base}/shield.png" # güvenlik / yetkisiz erişim durumları
+  bug: "{_base}/bug.png"
+  bot: "{_base}/bot.png"
+# ══════════════════════════════════════════════════════════════════
+#  BÖLÜM 2 ▸ EMBED ŞABLONLARI
+#
+#  Her şablon bir Discord Embed'in tam gövdesini temsil eder.
+#
+#  Alanlar:
+#    color       → Embed sol kenar rengi   (Go: Colors.yaml'dan int32)
+#    author      → Üst satır: ikon + etiket
+#    title       → Ana başlık
+#    description → Gövde metni             (Markdown destekli)
+#    fields      → Yan yana / alt alta veri alanları
+#    footer      → Alt bilgi: bot avatarı + ad + bağlam
+#
+#  Footer görünümü:  [bot avatarı]  VoidBot  •  {bağlam}
+# ══════════════════════════════════════════════════════════════════
+templates:
+  # ── Hata ────────────────────────────────────────────────────────
+  error:
+    color: color_error
+    author:
+      name: "Hata"
+      icon_url: "icons_error"
+    title: "{title}"
+    description: |
+      {message}
+    fields:
+      - name: "🕐 Tarih"
+        value: "`{timestamp}`"
+        inline: true
+      - name: "🔖 Hata Kodu"
+        value: "`{code}`"
+        inline: true
+    footer:
+      text: "{bot_name}  •  Hata Raporu"
+      icon_url: "{bot_avatar_url}"
+
+  # ── Uyarı ────────────────────────────────────────────────────────
+  warning:
+    color: color_warning
+    author:
+      name: "Uyarı"
+      icon_url: "icons_warning"
+    title: "{title}"
+    description: |
+      {message}
+    fields:
+      - name: "📌 Not"
+        value: "> {note}"
+        inline: false
+    footer:
+      text: "{bot_name}  •  Sistem Uyarısı"
+      icon_url: "{bot_avatar_url}"
+
+  # ── Başarı ───────────────────────────────────────────────────────
+  success:
+    color: color_success
+    author:
+      name: "Başarılı"
+      icon_url: "icons_success"
+    title: "{title}"
+    description: |
+      {message}
+    fields:
+      - name: "👤 Yetkili"
+        value: "{user_tag}"
+        inline: true
+      - name: "🕐 Tarih"
+        value: "`{timestamp}`"
+        inline: true
+    footer:
+      text: "{bot_name}  •  İşlem Tamamlandı"
+      icon_url: "{bot_avatar_url}"
+
+  # ── Bilgi ────────────────────────────────────────────────────────
+  info:
+    color: color_info
+    author:
+      name: "Bilgilendirme"
+      icon_url: "icons_info"
+    title: "{title}"
+    description: |
+      {message}
+    footer:
+      text: "{bot_name}  •  Bilgi"
+      icon_url: "{bot_avatar_url}"
+
+# ══════════════════════════════════════════════════════════════════
+#  BÖLÜM 3 ▸ KOMUT SİSTEMİ ŞABLONLARI
+#  Komutların ortak altyapı durumları için özel embed tasarımları.
+# ══════════════════════════════════════════════════════════════════
+commands:
+  # ── Bekleme Süresi (Cooldown) ────────────────────────────────────
+  cooldown:
+    color: color_warning
+    author:
+      name: "Yavaş ol!"
+      icon_url: "icons_warning"
+    title: "⏱️ Bekleme Süresi Aktif"
+    description: |
+      Bu komutu henüz tekrar kullanamazsın.
+      Lütfen aşağıdaki süre dolana kadar bekle.
+    fields:
+      - name: "⏳ Kalan Süre"
+        value: "```{seconds} saniye```"
+        inline: true
+      - name: "💬 Komut"
+        value: "`{prefix}{command_name}`"
+        inline: true
+    footer:
+      text: "{bot_name}  •  Hız Sınırı"
+      icon_url: "{bot_avatar_url}"
+
+  # ── Eksik Parametre ──────────────────────────────────────────────
+  missing_args:
+    color: color_info
+    author:
+      name: "Eksik Bilgi"
+      icon_url: "icons_info"
+    title: "⌨️ Parametre Eksik"
+    description: |
+      Komutu kullanmak için gerekli tüm bilgileri girmedin.
+    fields:
+      - name: "📖 Doğru Kullanım"
+        value: "```{usage}```"
+        inline: false
+    footer:
+      text: "{bot_name}  •  Kullanım Kılavuzu"
+      icon_url: "{bot_avatar_url}"
+
+  # ── Yetersiz Yetki ───────────────────────────────────────────────
+  no_permission:
+    color: color_error
+    author:
+      name: "Erişim Reddedildi"
+      icon_url: "icons_shield"
+    title: "🔒 Yetersiz Yetki"
+    description: |
+      Bu işlemi gerçekleştirmek için gerekli yetkiye sahip değilsin.
+    fields:
+      - name: "🛡️ Gerekli Yetki"
+        value: "`{required_permission}`"
+        inline: true
+    footer:
+      text: "{bot_name}  •  Güvenlik"
+      icon_url: "{bot_avatar_url}"
+
+# ══════════════════════════════════════════════════════════════════
+#  BÖLÜM 4 ▸ VARSAYILAN BAŞLIKLAR
+#  Komutlar özel başlık sağlamazsa bu değerler kullanılır.
+# ══════════════════════════════════════════════════════════════════
+titles:
+  default: "Bir hata oluştu"
+  no_perm: "Yetersiz yetki"
+  user_not_found: "Kullanıcı bulunamadı"
+  self_action: "Geçersiz işlem"
+  bot_action: "Botlara uygulanamaz"
+  internal_error: "Sunucu taraflı hata"
+  timeout: "Zaman aşımı"
+  db_error: "Veritabanı hatası"
+
+# ══════════════════════════════════════════════════════════════════
+#  BÖLÜM 5 ▸ VARSAYILAN MESAJLAR
+#  Komutlar özel açıklama sağlamazsa bu değerler kullanılır.
+# ══════════════════════════════════════════════════════════════════
+messages:
+  default: "Bir işlem gerçekleştirildi ancak detay belirtilmedi."
+  no_perm: "Bu komutu kullanmak için yeterli yetkiye sahip değilsin."
+  user_not_found: "Belirtilen kullanıcı bu sunucuda bulunamadı."
+  self_action: "Bu işlemi kendin üzerinde gerçekleştiremezsin."
+  bot_action: "Bu işlem botlara uygulanamaz."
+  db_error: "Veritabanı işlemi sırasında beklenmedik bir hata oluştu."
+  timeout: "İşlem süresi doldu. Lütfen komutu tekrar dene."
+  internal_error: "Sunucu taraflı bir hata oluştu. Bu durum otomatik olarak raporlandı."
+  content_error: "İçerik hatası"
+
+# ══════════════════════════════════════════════════════════════════
+#  BÖLÜM 6 ▸ ZAMAN BİRİMLERİ
+#  Süre biçimlendirme fonksiyonları tarafından kullanılır.
+# ══════════════════════════════════════════════════════════════════
+duration:
+  second: { full: "saniye", short: "sn" }
+  minute: { full: "dakika", short: "dk" }
+  hour: { full: "saat", short: "sa" }
+  day: { full: "gün", short: "g" }
+  week: { full: "hafta", short: "hf" }
+  month: { full: "ay", short: "ay" }
