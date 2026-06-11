@@ -2,8 +2,9 @@ package utils
 
 import (
 	library "ByteBunny/Bot/Core/Library"
-	"gopkg.in/yaml.v3"
 	"os"
+
+	"gopkg.in/yaml.v3"
 )
 
 // Belirtilen konumdaki YAML dosyasını verilen yapıya okur.
@@ -15,7 +16,7 @@ func ReadYaml(path string, to any) (ok bool, e error) {
 		return false, err
 	}
 
-	if err := yaml.Unmarshal(data, &to); err != nil {
+	if err := yaml.Unmarshal(data, to); err != nil {
 		return false, err
 	}
 

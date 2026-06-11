@@ -10,27 +10,33 @@ import (
 	"os"
 
 	"github.com/bwmarrin/discordgo"
+	"github.com/joho/godotenv"
 )
 
 func init() {
 	// Önyükleme noktası.
 
+	// ── Environment yükle ───────────────────────────────────────
+	if err := godotenv.Load(); err != nil {
+		panic(fmt.Errorf(".env dosyası okunamadı veya bulunamadı: %w", err))
+	}
+
 	// ── Uygulama ayarları ───────────────────────────────────────
-	if config.InitConfigApp() != nil {
-		utils.LogToConsole(utils.ERROR, "Config bilgileri yüklenemedi.")
+	if e := config.InitConfigApp(); e != nil {
+		utils.LogToConsole(utils.ERROR, fmt.Sprintf("Config bilgileri yüklenemedi: %v", e))
 		os.Exit(1)
 	}
 
 	// ── Uygulama renkleri ───────────────────────────────────────
-	if library.InitColor("Config/Colors.yaml") != nil {
-		utils.LogToConsole(utils.ERROR, "Config bilgileri yüklenemedi.")
+	if e := library.InitColor("Config/Colors.yaml"); e != nil {
+		utils.LogToConsole(utils.ERROR, fmt.Sprintf("Config bilgileri yüklenemedi: %v", e))
 		os.Exit(1)
 	}
 
 	// ── Ortak kullanım içerikleri ───────────────────────────────
-	if utils.InitCommonDecoder(fmt.Sprintf("Modules/Locales/%s/Common.yaml",
-		config.AppConfig.Bot.Lang)) != nil {
-		utils.LogToConsole(utils.ERROR, "Config bilgileri yüklenemedi.")
+	if e := utils.InitCommonDecoder(fmt.Sprintf("Modules/Locales/%s/Common.yaml",
+		config.AppConfig.Bot.Lang)); e != nil {
+		utils.LogToConsole(utils.ERROR, fmt.Sprintf("Config bilgileri yüklenemedi: %v", e))
 		os.Exit(1)
 	}
 

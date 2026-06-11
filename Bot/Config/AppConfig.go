@@ -1,6 +1,8 @@
 package config
 
-import utils "ByteBunny/Bot/Core/Utils"
+import (
+	utils "ByteBunny/Bot/Core/Utils"
+)
 
 type BotConfig struct {
 	Token    string
@@ -49,7 +51,7 @@ func loadBot(cfg *Config) error {
 		return err
 	}
 
-	if ok, err := utils.ReadYaml("Bot/Config/Bot.yaml", &cfg.Bot); err != nil || !ok {
+	if ok, err := utils.ReadYaml("Config/Bot.yaml", &cfg.Bot); err != nil || !ok {
 		return err
 	}
 
