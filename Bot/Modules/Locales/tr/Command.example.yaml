@@ -1,0 +1,98 @@
+# ==============================================================================
+# Bot/Modules/Locales/tr/Command.example.yaml
+# ==============================================================================
+#
+# Yeni bir komut yazarken bu dosyayı kopyala ve bu yapıyı kullan
+#
+# ==============================================================================
+
+# ── Meta ──────────────────────────────────────────────────────────
+name: "komut_adi"
+description: "Komutun ne yaptığını açıklayan kısa bir metin."
+usage: "komut_adi <zorunlu> [opsiyonel]"
+
+examples:
+  1: "`{prefix}komut_adi @{user} sebep`"
+  2: "`{prefix}komut_adi @{user}`"
+
+# ── Başlıklar ─────────────────────────────────────────────────────
+# Embed'in sol üst köşesinde görünür.
+# Komuta özel olmayanlar Common.yaml > titles'a fallback yapar.
+titles:
+  success: "✅ Başarılı"
+  error: "❌ Hata"
+
+# ── Mesajlar ──────────────────────────────────────────────────────
+# Embed gövdesi. {placeholder} sözdizimi desteklenir.
+# Komuta özel olmayanlar Common.yaml > messages'a fallback yapar.
+# Hata mesajları err_ önekiyle başlar.
+messages:
+  success: |
+    İşlem başarıyla tamamlandı.
+  no_reason: "Sebep belirtilmedi."
+  err_no_target: "Hedef kullanıcıyı belirtmelisin."
+  err_self: "Bu işlemi kendine uygulayamazsın."
+  err_self_bot: "Bu işlemi kendime uygulayamam."
+  err_no_perm_bot: "Bu işlem için gerekli izne sahip değilim."
+  err_no_perm_user: "Bu komutu kullanmak için yetkin yok."
+  err_invalid_user: "Geçerli bir kullanıcı belirtmelisin."
+
+# ── İçerikler ──────────────────────────────────────────────────────
+# Embed gövdesi. {placeholder} sözdizimi desteklenir.
+# Hata mesajları err_ önekiyle başlar.
+# Öğeler id'de yazan metin numara yakalanır.
+# Opsiyoneldir.
+
+# fields:
+#   - id: 1
+#     name: "Hata"
+#     value: "{command_name} komutunda hata oluştu"
+#     inline: true
+#   - id: 2
+#     name: "Başarılı"
+#     value: "Başarılı"
+#     inline: true
+
+# ── İkonlar ───────────────────────────────────────────────────────
+# Opsiyonel. Komuta özel olmayanlar Common.yaml > icons'a fallback yapar.
+icons:
+  success: "https://raw.githubusercontent.com/ardayndm/VoidBot/refs/heads/main/icons/<ikon>.png"
+
+# ── Son alt yazı ───────────────────────────────────────────────────────
+# Opsiyonel. ByteBunny • Command    şeklinde yazı için kullanılır.
+footers:
+  default: "Command"
+# ── Ayarlar ───────────────────────────────────────────────────────
+options:
+  # Genel — her komutta bulunur
+  enabled: true
+  category: "general" # general | moderation | utility | fun | ...
+  ephemeral: false
+  prefix: true
+  cooldown: 5.0 # saniye
+
+  # Komuta özel scalar değerler buraya eklenir.
+  # GetOptionInt() / GetOptionString() / GetOptionBool() ile okunur.
+  # Örnek:
+  # max_amount: 100
+  # default_reason: "Sebep belirtilmedi."
+
+  # Otomatik aksiyon eşikleri — opsiyonel, sadece gerekli komutlarda kullanılır
+  # auto_actions:
+  #   - at:     7
+  #     action: "kick"          # kick | ban
+  #     reason: "{count}. eşiğe ulaştı."
+  #   - at:     15
+  #     action: "ban"
+  #     reason: "{count}. eşiğe ulaştı."
+
+  # Slash argümanları — opsiyonel
+  slash:
+    - name: "kullanici"
+      description: "Hedef kullanıcı."
+      type: "user" # user | string | integer | boolean | channel | role
+      required: true
+    - name: "sebep"
+      description: "İşlem sebebi."
+      type: "string"
+      required: false

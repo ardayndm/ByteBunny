@@ -1,0 +1,45 @@
+# ==============================================================================
+# Core/Locale/tr/Presence.yaml
+# ==============================================================================
+
+# ── Durum ─────────────────────────────────────────────────────────
+# online | idle | dnd | invisible
+status: "online"
+
+# ── Değişim Aralığı ───────────────────────────────────────────────
+# Saniye cinsinden
+interval: 10.0
+
+# ── Aktiviteler ───────────────────────────────────────────────────
+# type : playing | listening | watching | streaming | competing
+# url  : yalnızca streaming tipinde zorunludur
+# details ve state opsiyoneldir — boş bırakılabilir veya hiç yazılmayabilir
+# Otomatik olarak {bot_name} ve {prefix} değiştirilir
+activities:
+  - name: "{bot_name} | {prefix}help"
+    type: "playing"
+    details: "Sunucu yönetimi aktif"
+    state: "7/24 hizmette"
+
+  - name: "{prefix}help | /help"
+    type: "listening"
+    details: "Komutları bekliyorum..."
+
+  - name: "Buraya ben lazımdım zaten ;)"
+    type: "playing"
+
+  - name: "VoidBot"
+    type: "streaming"
+    url: "https://github.com/ardayndm/VoidBot"
+    details: "Açık kaynak kodlu"
+    state: "GitHub'da incele"
+
+  - name: "Senin için açık kaynak"
+    type: "watching"
+    details: "GitHub projesi"
+    state: "Geliştiriliyor"
+
+  - name: "{prefix}help | /help"
+    type: "watching"
+    details: "Tüm komutları görmek için"
+    state: "Geliştiriliyor"
