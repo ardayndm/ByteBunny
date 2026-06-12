@@ -29,7 +29,7 @@ messages:
 
 # ── İkonlar ───────────────────────────────────────────────────────
 icons:
-  info: "https://github.com/ardayndm/ByteBunny/blob/main/Images/Icons/help.png?raw=true"
+  list: "https://github.com/ardayndm/ByteBunny/blob/main/Images/Icons/list.png?raw=true"
 
 # ── Alt yazılar ───────────────────────────────────────────────────────
 footers:

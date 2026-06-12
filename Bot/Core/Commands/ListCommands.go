@@ -515,7 +515,7 @@ func listCommandsExecute(s *discordgo.Session, t utils.Target, page int, lc *lib
 		embedMessageKey = "has_no_command_info"
 	}
 
-	infoIcon := lc.GetIcon("info", "")
+	infoIcon := lc.GetIcon("list", "")
 
 	footerFmt := lc.Footers["page"]
 	if footerFmt == "" {

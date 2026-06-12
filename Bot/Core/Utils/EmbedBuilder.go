@@ -94,7 +94,7 @@ func BuildCommonEmbedFast(s *discordgo.Session, color int, title, message, custo
 //	Önceliği Komut ile yapmaya çalışır , hata oluşursa fallback olarak Common'a başvurur
 func BuildCommandEmbedFast(s *discordgo.Session,
 	cmd library.CommandLib, color int, titleKey, messageKey,
-	customFooterText, guildId, iconName string, keyMap map[string]string,
+	customFooterText, guildId, iconUrl string, keyMap map[string]string,
 	fields ...*discordgo.MessageEmbedField) library.EmbedOptions {
 
 	title := KeyFormat(GetOrDefault(cmd.Titles[titleKey], common.Titles["default"]), keyMap)
@@ -103,7 +103,7 @@ func BuildCommandEmbedFast(s *discordgo.Session,
 		Title:        title,
 		Description:  desc,
 		Color:        color,
-		ThumbnailURL: GetOrDefault(cmd.Icons[iconName], common.Icons["bug"]),
+		ThumbnailURL: GetOrDefault(iconUrl, common.Icons["bug"]),
 		FooterText:   customFooterText,
 	}
 
