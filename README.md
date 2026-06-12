@@ -66,6 +66,10 @@ Her türlü katkı (kod, dokümantasyon, fikir, hata bildirimi) değerlidir! �
 
 ---
 
+## 📖 Wiki
+
+Komut ekleme, Core sistemini özelleştirme ve daha fazlası için **[Wiki sayfamıza](https://github.com/ardayndm/ByteBunny/wiki)** göz atabilirsin.
+
 ## 📜 Lisans
 
 Bu proje [GPL-3.0](./LICENSE) lisansı ile lisanslanmıştır.
