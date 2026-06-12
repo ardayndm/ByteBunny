@@ -4,10 +4,12 @@ import (
 	config "ByteBunny/Bot/Config"
 	events "ByteBunny/Bot/Core/Events"
 	library "ByteBunny/Bot/Core/Library"
+	preload "ByteBunny/Bot/Core/Preload"
 	utils "ByteBunny/Bot/Core/Utils"
 	"fmt"
 	"path/filepath"
 	"strings"
+	"sync"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -15,6 +17,11 @@ import (
 // ── Tipler ───────────────────────────────────────────────────────────────────────
 type HelpCommandSlash struct{ cmd *library.CommandLib }
 type HelpCommandPrefix struct{ cmd *library.CommandLib }
+
+var (
+	slashOnceHelp  sync.Once
+	prefixOnceHelp sync.Once
+)
 
 // ── Oto kayıt ───────────────────────────────────────────────────────────────────────
 
@@ -54,11 +61,18 @@ func (helpPrefix *HelpCommandPrefix) checkLibrary() bool {
 // ── Slash Komutu ────────────────────────────────────────────────────────────────────
 
 func (helpSlash *HelpCommandSlash) LoadCommandLib() error {
-	lib, err := loadHelpLib()
+	var loadErr error
 
-	helpSlash.cmd = lib
+	slashOnceHelp.Do(func() {
+		lib, err := loadHelpLib()
+		if err != nil {
+			loadErr = err
+			return
+		}
+		helpSlash.cmd = lib
+	})
 
-	return err
+	return loadErr
 }
 
 // Komut adı
@@ -150,10 +164,18 @@ func (helpPrefix *HelpCommandPrefix) GetGeneralFormatKeys(extra ...map[string]st
 }
 
 func (helpPrefix *HelpCommandPrefix) LoadCommandLib() error {
-	lib, err := loadHelpLib()
-	helpPrefix.cmd = lib
+	var loadErr error
 
-	return err
+	prefixOnceHelp.Do(func() {
+		lib, err := loadHelpLib()
+		if err != nil {
+			loadErr = err
+			return
+		}
+		helpPrefix.cmd = lib
+	})
+
+	return loadErr
 }
 
 func (helpPrefix *HelpCommandPrefix) Execute(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
@@ -179,20 +201,6 @@ func (helpPrefix *HelpCommandPrefix) Execute(s *discordgo.Session, m *discordgo.
 
 // ──────────────────────────────────────────────────────────────────────
 // ── İç Mantık ────────────────────────────────────────────────────────────────────
-
-// Verilen komut adını registry de kontrol eder , Eğer bir registry'de bile kayıtlı değilse false döner.
-func isAllowedCommandName(cmdName string) bool {
-
-	// Registry'de de kontrol et — yaml yoksa veya komut kayıtlı değilse hata göster
-	_, slashExists := events.GetRegisteredSlashCommands()[cmdName]
-	_, prefixExists := events.GetRegisteredPrefixCommands()[cmdName]
-
-	if !slashExists && !prefixExists {
-		return false
-	}
-
-	return true
-}
 
 // komut adı boşsa genel bilgi, doluysa o komutun detayını gönderir.
 func helpExecute(s *discordgo.Session, t utils.Target, cmdName string, helpCmd *library.CommandLib) {
@@ -263,7 +271,7 @@ func sendHelpForCommand(s *discordgo.Session, t utils.Target, cmdName string, he
 	}
 
 	// Registry'de de kontrol et — yaml yoksa veya komut kayıtlı değilse hata göster
-	if yamlReadError != nil || !isYamlReadOk || !isAllowedCommandName(cmdName) {
+	if yamlReadError != nil || !isYamlReadOk || !preload.IsCommandExists(cmdName) {
 		sendHelpNotFound(s, t, cmdName, helpCmd, keyMap)
 		return
 	}

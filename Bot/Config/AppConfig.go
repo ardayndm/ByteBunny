@@ -1,8 +1,6 @@
 package config
 
-import (
-	utils "ByteBunny/Bot/Core/Utils"
-)
+import utils "ByteBunny/Bot/Core/Utils"
 
 type BotConfig struct {
 	Token    string
