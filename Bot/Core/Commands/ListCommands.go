@@ -10,6 +10,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"sync"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -17,6 +18,11 @@ import (
 // ── Tipler ───────────────────────────────────────────────────────────────────────
 type ListCommandsSlash struct{ cmd *library.CommandLib }
 type ListCommandsPrefix struct{ cmd *library.CommandLib }
+
+var (
+	slashOnceListCommand  sync.Once
+	prefixOnceListCommand sync.Once
+)
 
 // ── Oto kayıt ───────────────────────────────────────────────────────────────────────
 
@@ -56,9 +62,18 @@ func (lcPrefix *ListCommandsPrefix) checkLibrary() bool {
 // ── Slash Komutu ────────────────────────────────────────────────────────────────────
 
 func (lcSlash *ListCommandsSlash) LoadCommandLib() error {
-	lib, err := loadListCommandsLib()
-	lcSlash.cmd = lib
-	return err
+	var loadErr error
+
+	slashOnceListCommand.Do(func() {
+		lib, err := loadListCommandsLib()
+		if err != nil {
+			loadErr = err
+			return
+		}
+		lcSlash.cmd = lib
+	})
+
+	return loadErr
 }
 
 func (lcSlash *ListCommandsSlash) Name() string {
@@ -144,9 +159,18 @@ func (lcSlash *ListCommandsSlash) Execute(s *discordgo.Session, i *discordgo.Int
 // ── Prefix Komutu ────────────────────────────────────────────────────────────────────
 
 func (lcPrefix *ListCommandsPrefix) LoadCommandLib() error {
-	lib, err := loadListCommandsLib()
-	lcPrefix.cmd = lib
-	return err
+	var loadErr error
+
+	prefixOnceListCommand.Do(func() {
+		lib, err := loadListCommandsLib()
+		if err != nil {
+			loadErr = err
+			return
+		}
+		lcPrefix.cmd = lib
+	})
+
+	return loadErr
 }
 
 func (lcPrefix *ListCommandsPrefix) Name() string {

@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"path/filepath"
 	"strings"
+	"sync"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -15,6 +16,11 @@ import (
 // ── Tipler ───────────────────────────────────────────────────────────────────────
 type HelpCommandSlash struct{ cmd *library.CommandLib }
 type HelpCommandPrefix struct{ cmd *library.CommandLib }
+
+var (
+	slashOnceHelp  sync.Once
+	prefixOnceHelp sync.Once
+)
 
 // ── Oto kayıt ───────────────────────────────────────────────────────────────────────
 
@@ -54,11 +60,18 @@ func (helpPrefix *HelpCommandPrefix) checkLibrary() bool {
 // ── Slash Komutu ────────────────────────────────────────────────────────────────────
 
 func (helpSlash *HelpCommandSlash) LoadCommandLib() error {
-	lib, err := loadHelpLib()
+	var loadErr error
 
-	helpSlash.cmd = lib
+	slashOnceHelp.Do(func() {
+		lib, err := loadHelpLib()
+		if err != nil {
+			loadErr = err
+			return
+		}
+		helpSlash.cmd = lib
+	})
 
-	return err
+	return loadErr
 }
 
 // Komut adı
@@ -150,10 +163,18 @@ func (helpPrefix *HelpCommandPrefix) GetGeneralFormatKeys(extra ...map[string]st
 }
 
 func (helpPrefix *HelpCommandPrefix) LoadCommandLib() error {
-	lib, err := loadHelpLib()
-	helpPrefix.cmd = lib
+	var loadErr error
 
-	return err
+	prefixOnceHelp.Do(func() {
+		lib, err := loadHelpLib()
+		if err != nil {
+			loadErr = err
+			return
+		}
+		helpPrefix.cmd = lib
+	})
+
+	return loadErr
 }
 
 func (helpPrefix *HelpCommandPrefix) Execute(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
