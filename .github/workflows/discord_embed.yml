@@ -1,0 +1,41 @@
+name: Discord Embed Bildirimi
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  discord-embed-gonder:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Discord'a Gelişmiş Embed Mesaj Gönder
+        uses: sinikka/discord-webhook-action@v1.2.0
+        with:
+          url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          description: |
+            🚀 **Depoya Yeni Kod Gönderildi!**
+            
+            **Commit Mesajı:**
+            ```
+            \${{ github.event.head_commit.message }}
+            ```
+          color: "0x00FF00"
+          fields: |
+            [
+              {
+                "name": "👤 Geliştirici",
+                "value": "${{ github.event.head_commit.author.name }}",
+                "inline": true
+              },
+              {
+                "name": "🌿 Branch (Dal)",
+                "value": "${{ github.ref_name }}",
+                "inline": true
+              },
+              {
+                "name": "🔗 Commit Detayları",
+                "value": "[Değişiklikleri İncele](${{ github.event.head_commit.url }})",
+                "inline": false
+              }
+            ]
