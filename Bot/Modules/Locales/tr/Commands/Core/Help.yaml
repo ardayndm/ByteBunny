@@ -61,7 +61,7 @@ fields:
 # ── İkonlar ───────────────────────────────────────────────────────
 # Opsiyonel. Komuta özel olmayanlar Common.yaml > icons'a fallback yapar.
 icons:
-  info: ""
+  info: "https://github.com/ardayndm/ByteBunny/blob/main/Images/Icons/help.png?raw=true"
 
 # ── Son alt yazı ───────────────────────────────────────────────────────
 # Opsiyonel. ByteBunny • Command    şeklinde yazı için kullanılır.

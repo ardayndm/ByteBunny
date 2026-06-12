@@ -57,7 +57,7 @@ messages:
 # ── İkonlar ───────────────────────────────────────────────────────
 # Opsiyonel. Komuta özel olmayanlar Common.yaml > icons'a fallback yapar.
 icons:
-  success: "https://raw.githubusercontent.com/ardayndm/VoidBot/refs/heads/main/icons/<ikon>.png"
+  success: "https://ikon_url.png"
 
 # ── Son alt yazı ───────────────────────────────────────────────────────
 # Opsiyonel. ByteBunny • Command    şeklinde yazı için kullanılır.

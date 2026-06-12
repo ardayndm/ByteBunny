@@ -21,14 +21,12 @@
 #  Placeholder olarak kullanılmaz; sabit URL'dir.
 # ══════════════════════════════════════════════════════════════════
 icons:
-  error: ""
-  warning: ""
-  success: ""
-  info: ""
-  loading: ""
-  shield: ""
-  bug: ""
-  bot: ""
+  error: "https://github.com/ardayndm/ByteBunny/blob/main/Images/Icons/error.png?raw=true"
+  warning: "https://github.com/ardayndm/ByteBunny/blob/main/Images/Icons/warn.png?raw=true"
+  success: "https://github.com/ardayndm/ByteBunny/blob/main/Images/Icons/success.png?raw=true"
+  info: "https://github.com/ardayndm/ByteBunny/blob/main/Images/Icons/info.png?raw=true"
+  bug: "https://github.com/ardayndm/ByteBunny/blob/main/Images/Icons/bug.png?raw=true"
+  bot: "https://github.com/ardayndm/ByteBunny/blob/main/Images/Icons/bot.png?raw=true"
 # ══════════════════════════════════════════════════════════════════
 #  BÖLÜM 2 ▸ EMBED ŞABLONLARI
 #
