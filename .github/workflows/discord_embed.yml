@@ -13,25 +13,28 @@ jobs:
         run: |
           curl -H "Content-Type: application/json" \
           -d "$(jq -n \
-            --arg desc "**Commit Mesajı:**\n${{ github.event.head_commit.message }}" \
             --arg author "${{ github.event.head_commit.author.name }}" \
             --arg branch "${{ github.ref_name }}" \
-            --arg repo "${{ github.repository }}" \
+            --arg msg "${{ github.event.head_commit.message }}" \
             --arg url "${{ github.event.head_commit.url }}" \
+            --arg repo "${{ github.repository }}" \
             '{
-              username: "Repo Bot",
-              avatar_url: "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png",
+              username: "ByteBunny Duyuru",
+              avatar_url: "https://raw.githubusercontent.com/ardayndm/ByteBunny/main/assets/logo.png",
+              content: "@everyone Depoya yeni bir güncelleme geldi! 👇",
               embeds: [{
-                title: "🚀 Yeni Kod Gönderildi!",
-                description: $desc,
-                color: 65280,
-                fields: [
-                  {name: "👤 Geliştirici", value: $author, inline: true},
-                  {name: "🌿 Branch", value: $branch, inline: true},
-                  {name: "📦 Repo", value: $repo, inline: true},
-                  {name: "🔗 Commit Detayları", value: ("[Değişiklikleri İncele](" + $url + ")"), inline: false}
-                ],
-                footer: {text: "GitHub Actions"},
+                author: {
+                  name: "🚀 ByteBunny Yayında!",
+                  icon_url: "https://raw.githubusercontent.com/ardayndm/ByteBunny/main/assets/logo.png"
+                },
+                description: ("Merhaba arkadaşlar!\n\n**" + $author + "** tarafından **" + $branch + "** dalına yeni bir kod gönderildi.\n\n**📝 Commit Mesajı:**\n> " + $msg + "\n\n**🔗 Detaylar:**\n[Değişiklikleri İncele](" + $url + ")"),
+                color: 5793266,
+                image: {
+                  url: "https://raw.githubusercontent.com/ardayndm/ByteBunny/main/assets/banner.png"
+                },
+                footer: {
+                  text: ("📦 " + $repo + " • Görüş ve katkılarınızı bekliyoruz!")
+                },
                 timestamp: (now | todate)
               }]
             }')" \
