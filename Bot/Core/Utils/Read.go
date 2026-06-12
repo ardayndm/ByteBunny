@@ -11,7 +11,6 @@ import (
 func ReadYaml(path string, to any) (ok bool, e error) {
 
 	data, err := os.ReadFile(path)
-
 	if err != nil {
 		return false, err
 	}

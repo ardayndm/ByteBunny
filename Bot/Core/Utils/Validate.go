@@ -39,30 +39,34 @@ func ValidateCommandYamlFilepath(cmdName, botLang string, isCore bool) (resultPa
 
 	// Dosya adının uzunluğunu kontrol et
 	if len(cmdName) > 35 {
+
 		return "", library.Err_InvalidCommandName
 	}
 
 	// BotLang uzunluğu kontrolü
 	if len(botLang) > 3 {
+
 		return "", library.Err_InvalidLanguage
 	}
 
 	// cmdName validasyonu
 	if err := ValidateStringAlphanumeric(cmdName); err != nil {
+
 		return "", library.Err_InvalidCommandName
 	}
 
 	// botLang validasyonu
 	if err := ValidateLanguageCode(botLang); err != nil {
+
 		return "", library.Err_InvalidLanguage
 	}
 
 	// Yol oluştur
 	var path string
 	if isCore {
-		path = fmt.Sprintf("Modules/Commands/%s/Commands/Core/%s.yaml", botLang, cmdName)
+		path = fmt.Sprintf("Modules/Locales/%s/Commands/Core/%s.yaml", botLang, cmdName)
 	} else {
-		path = fmt.Sprintf("Modules/Commands/%s/Commands/%s.yaml", botLang, cmdName)
+		path = fmt.Sprintf("Modules/Locales/%s/Commands/%s.yaml", botLang, cmdName)
 	}
 
 	// Path traversal saldırılarını temizle
@@ -70,11 +74,12 @@ func ValidateCommandYamlFilepath(cmdName, botLang string, isCore bool) (resultPa
 
 	// Temizlenen yolda hala ../ var mı kontrol et
 	if strings.Contains(cleanPath, "..") {
+
 		return "", library.Err_SuspectedFilePath
 	}
 
 	// Base directory kontrolü
-	baseDir := "Modules/Commands"
+	baseDir := filepath.Join("Modules", "Locales", botLang, "Commands")
 	if !strings.HasPrefix(cleanPath, baseDir+string(filepath.Separator)) {
 		return "", library.Err_SuspectedFilePath
 	}
@@ -83,21 +88,25 @@ func ValidateCommandYamlFilepath(cmdName, botLang string, isCore bool) (resultPa
 	// Beklenen format: Modules/Commands/{lang}/Commands/[Core/]{cmdName}.yaml
 	parts := strings.Split(cleanPath, string(filepath.Separator))
 	if len(parts) < 4 {
+
 		return "", library.Err_InvalidPath
 	}
 
 	// Modules/Commands/ kontrolü
-	if parts[0] != "Modules" || parts[1] != "Commands" {
+	if parts[0] != "Modules" || parts[1] != "Locales" || parts[2] != botLang || parts[3] != "Commands" {
+
 		return "", library.Err_InvalidPath
 	}
 
 	// Dil kodu kontrolü (tekrar)
 	if err := ValidateLanguageCode(parts[2]); err != nil {
+
 		return "", library.Err_InvalidLanguage
 	}
 
 	// Commands dizini kontrolü
 	if parts[3] != "Commands" {
+
 		return "", library.Err_InvalidPath
 	}
 

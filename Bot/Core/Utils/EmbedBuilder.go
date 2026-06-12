@@ -131,6 +131,20 @@ func RebuildCommandField(field *library.CommandField) *discordgo.MessageEmbedFie
 	}
 }
 
+// Hızlı şekilde Komut için Field alanlarını discord'a göre düzenler
+func RebuildCommandFields(fields ...*library.CommandField) []*discordgo.MessageEmbedField {
+	var list []*discordgo.MessageEmbedField
+
+	for _, f := range fields {
+		list = append(list, &discordgo.MessageEmbedField{
+			Name:   f.Name,
+			Value:  f.Value,
+			Inline: f.Inline,
+		})
+	}
+	return list
+}
+
 // (internal) | Verilen Embed mesaj içeriğindeki URL adreslerini kontrol eder ve ayıklar
 func checkUrlFormats(opts *library.EmbedOptions) {
 

@@ -1,5 +1,5 @@
 # ── Meta ──────────────────────────────────────────────────────────
-name: "help"
+name: "help" # Dosya adı ile aynı olmak zorunda ki help vb. gibi komutlar tarafından görülebilsin. isim değişirse dosya adı da değişmeli.
 description: "Komut hakkında bilgi verir."
 usage: "komut_adi <zorunlu> [opsiyonel]"
 
@@ -27,12 +27,12 @@ messages:
 
     Bu komutla ilgili detaylı bilgi almak için bir komut ismi belirtmen gerekiyor.
 
-    > **İpucu:** Tüm komut listesini görüntülemek için `{prefix}listcommands [sayfaNo]` ya da `/liscommands [sayfaNo]` komutunu kullanabilirsin.
+    > **İpucu:** Tüm komut listesini görüntülemek için `{prefix}listcommands [sayfaNo]` ya da `/listcommands [sayfaNo]` komutunu kullanabilirsin.
   err_not_found: |
     **Komut Bulunamadı**
 
     Aradığın isimde bir komut mevcut değil. 
-    > Lütfen komut adını kontrol et veya tüm listeyi görmek için `{prefix}listcommands [sayfaNo]` ya da `/liscommands [sayfaNo]` yaz.
+    > Lütfen komut adını kontrol et veya tüm listeyi görmek için `{prefix}listcommands [sayfaNo]` ya da `/listcommands [sayfaNo]` yaz.
 
 # ── İçerikler ──────────────────────────────────────────────────────
 # Embed gövdesi. {placeholder} sözdizimi desteklenir.

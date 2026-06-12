@@ -1,0 +1,57 @@
+# ── Meta ──────────────────────────────────────────────────────────
+name: "listcommands" # Dosya adı ile aynı olmak zorunda ki help vb. gibi komutlar tarafından görülebilsin. isim değişirse dosya adı da değişmeli.
+description: "Tüm komutları kategorili ve sayfalı şekilde listeler."
+usage: "[sayfaNo]"
+
+examples:
+  1: "`{prefix}listcommands`"
+  2: "`{prefix}listcommands 2`"
+
+# ── Başlıklar ─────────────────────────────────────────────────────
+titles:
+  info: "📜 **Komut Listesi**"
+
+# ── Mesajlar ──────────────────────────────────────────────────────
+messages:
+  info: |
+    Aşağıda kategorilere ayrılmış tüm komutları bulabilirsin.
+    Detaylı bilgi için `{prefix}help <komut>` ya da `/help <komut>` kullanabilirsin.
+
+  has_no_command_info: |
+    Gösterilecek şuanlık bir komut yok... Ama ileride olabilir!
+    Sürekli geliştiriliyorum!
+
+  # Liste render ayarları (helpExecute içinde KeyFormat ile kullanılır)
+  category_header: "── {category} ──"
+  category_continued: " (devam)"
+  command_item: "• **{command}** — {description}"
+  no_description: "Açıklama yok."
+
+# ── İkonlar ───────────────────────────────────────────────────────
+icons:
+  info: ""
+
+# ── Alt yazılar ───────────────────────────────────────────────────────
+footers:
+  default: "Komut Listesi"
+  page: "{bot_name} • Sayfa {page}/{total_pages}"
+
+# ── Ayarlar ───────────────────────────────────────────────────────
+options:
+  enabled: true
+  category: "utility"
+  ephemeral: true
+  prefix: true
+  cooldown: 3.0
+  command_count_per_page: 20 # 23'den fazla olmamalı yoksa hata oluşur. (23 dahil)
+
+  categories:
+    other: "❓ Diğer"
+    utility: "⚙️ Yardımcı"
+    moderation: "🛡️ Moderasyon"
+
+  slash:
+    - name: "sayfa"
+      description: "Görüntülenecek sayfa numarası."
+      type: "integer"
+      required: false

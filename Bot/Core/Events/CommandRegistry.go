@@ -67,7 +67,7 @@ func registerSlashCommand(cmd SlashCommand) {
 	slashMutex.Lock()
 	defer slashMutex.Unlock()
 	slashRegistry[cmd.Name()] = cmd
-	utils.LogToConsole(utils.DEBUG, "Slash komutu Cache'den alınıp Sisteme kaydedildi: "+config.AppConfig.Bot.Prefix+cmd.Name())
+	utils.LogToConsole(utils.DEBUG, "Slash komutu Cache'den alınıp Sisteme kaydedildi: "+"/"+cmd.Name())
 }
 
 // Sisteme Prefix komutu kaydeder.

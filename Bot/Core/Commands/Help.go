@@ -26,7 +26,7 @@ func init() {
 
 func loadHelpLib() (*library.CommandLib, error) {
 	var lib library.CommandLib
-	path := fmt.Sprintf("Modules/Locales/%s/Commands/Core/Help.yaml", config.AppConfig.Bot.Lang)
+	path := fmt.Sprintf("Modules/Locales/%s/Commands/Core/help.yaml", config.AppConfig.Bot.Lang)
 	ok, err := utils.ReadYaml(path, &lib)
 	if err != nil || !ok {
 		return nil, err
@@ -245,12 +245,14 @@ func sendHelpForCommand(s *discordgo.Session, t utils.Target, cmdName string, he
 	}
 
 	// Core komut yolunu dene
+	// ! Komut adı ile .yaml dosya adı aynı olmalı yoksa hatalı kabul eder
 	corePath, err := utils.ValidateCommandYamlFilepathStrict(cmdName, config.AppConfig.Bot.Lang, true)
 	if err == nil {
 		isYamlReadOk, yamlReadError = utils.ReadYaml(corePath, &targetLib)
 	}
 
 	// Core'da bulunamadıysa normal yolunu dene
+	// ! Komut adı ile .yaml dosya adı aynı olmalı yoksa hatalı kabul eder
 	if !isYamlReadOk {
 		normalPath, err := utils.ValidateCommandYamlFilepathStrict(cmdName, config.AppConfig.Bot.Lang, false)
 		if err == nil {
@@ -260,7 +262,6 @@ func sendHelpForCommand(s *discordgo.Session, t utils.Target, cmdName string, he
 
 	// Registry'de de kontrol et — yaml yoksa veya komut kayıtlı değilse hata göster
 	if yamlReadError != nil || !isYamlReadOk || !isAllowedCommandName(cmdName) {
-		utils.LogToConsole(utils.DEBUG, fmt.Sprintf("Şüpheli komut denemesi (Komut Registry'de kayıtlı değil): %s", cmdName))
 		sendHelpNotFound(s, t, cmdName, helpCmd, keyMap)
 		return
 	}
