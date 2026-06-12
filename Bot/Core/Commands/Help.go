@@ -4,6 +4,7 @@ import (
 	config "ByteBunny/Bot/Config"
 	events "ByteBunny/Bot/Core/Events"
 	library "ByteBunny/Bot/Core/Library"
+	preload "ByteBunny/Bot/Core/Preload"
 	utils "ByteBunny/Bot/Core/Utils"
 	"fmt"
 	"path/filepath"
@@ -201,20 +202,6 @@ func (helpPrefix *HelpCommandPrefix) Execute(s *discordgo.Session, m *discordgo.
 // ──────────────────────────────────────────────────────────────────────
 // ── İç Mantık ────────────────────────────────────────────────────────────────────
 
-// Verilen komut adını registry de kontrol eder , Eğer bir registry'de bile kayıtlı değilse false döner.
-func isAllowedCommandName(cmdName string) bool {
-
-	// Registry'de de kontrol et — yaml yoksa veya komut kayıtlı değilse hata göster
-	_, slashExists := events.GetRegisteredSlashCommands()[cmdName]
-	_, prefixExists := events.GetRegisteredPrefixCommands()[cmdName]
-
-	if !slashExists && !prefixExists {
-		return false
-	}
-
-	return true
-}
-
 // komut adı boşsa genel bilgi, doluysa o komutun detayını gönderir.
 func helpExecute(s *discordgo.Session, t utils.Target, cmdName string, helpCmd *library.CommandLib) {
 	prefix := config.AppConfig.Bot.Prefix
@@ -284,7 +271,7 @@ func sendHelpForCommand(s *discordgo.Session, t utils.Target, cmdName string, he
 	}
 
 	// Registry'de de kontrol et — yaml yoksa veya komut kayıtlı değilse hata göster
-	if yamlReadError != nil || !isYamlReadOk || !isAllowedCommandName(cmdName) {
+	if yamlReadError != nil || !isYamlReadOk || !preload.IsCommandExists(cmdName) {
 		sendHelpNotFound(s, t, cmdName, helpCmd, keyMap)
 		return
 	}

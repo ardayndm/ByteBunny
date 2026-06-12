@@ -6,6 +6,7 @@ import (
 	events "ByteBunny/Bot/Core/Events"
 	general "ByteBunny/Bot/Core/General"
 	library "ByteBunny/Bot/Core/Library"
+	preload "ByteBunny/Bot/Core/Preload"
 	utils "ByteBunny/Bot/Core/Utils"
 	"fmt"
 	"os"
@@ -46,10 +47,14 @@ func init() {
 	// ── Sisteme kayıt olmak için bekleyen Cache içindeki komutları yükle ───────────────────────────────
 	events.LoadAllRegistryCommands()
 
+	// ───────────────── Tüm komutlar sisteme kayıt olduktan sonra ─────────────────
+
+	// ── Komutları Cache'ler ───────────────────────────────
+	go preload.PreloadAllCommands()
+
 }
 
 func main() {
-
 	// ── Uygulama ───────────────────────────────
 
 	BotSession := startBot(loadAfterBot) // Botu başlatır

@@ -4,6 +4,7 @@ import (
 	config "ByteBunny/Bot/Config"
 	events "ByteBunny/Bot/Core/Events"
 	library "ByteBunny/Bot/Core/Library"
+	preload "ByteBunny/Bot/Core/Preload"
 	utils "ByteBunny/Bot/Core/Utils"
 	"fmt"
 	"path/filepath"
@@ -221,9 +222,40 @@ type commandEntry struct {
 	Category    string
 }
 
+func collectCommandEntries() []commandEntry {
+	// Önce preload cache'ini kontrol et
+	if preload.IsPreloadDone() {
+		return collectFromCache() // Cache'den al
+	}
+
+	// Preload bitmediyse eski yöntemi kullan (güvenlik)
+	return collectFromDisk()
+}
+
+// Cache'den oku
+func collectFromCache() []commandEntry {
+	cachedCommands := preload.GetAllCachedCommands()
+	entries := make([]commandEntry, 0, len(cachedCommands))
+
+	for _, cmd := range cachedCommands {
+		// Sadece aktif ve gizli olmayan komutları göster
+		if !cmd.Enabled || cmd.Hidden {
+			continue
+		}
+
+		entries = append(entries, commandEntry{
+			Name:        cmd.Name,
+			Description: cmd.Description,
+			Category:    cmd.Category,
+		})
+	}
+
+	return entries
+}
+
 // Tüm kayıtlı (slash + prefix) komutları yaml'larından okuyup commandEntry listesine çevirir.
 // Aynı isimde hem slash hem prefix kaydı varsa tek seferde sayılır.
-func collectCommandEntries() []commandEntry {
+func collectFromDisk() []commandEntry {
 	seen := make(map[string]bool)
 	var entries []commandEntry
 
