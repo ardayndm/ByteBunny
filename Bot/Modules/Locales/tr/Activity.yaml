@@ -28,9 +28,9 @@ activities:
   - name: "Buraya ben lazımdım zaten ;)"
     type: "playing"
 
-  - name: "VoidBot"
+  - name: "ByteBunny"
     type: "streaming"
-    url: "https://github.com/ardayndm/VoidBot"
+    url: "https://github.com/ardayndm/ByteBunny"
     details: "Açık kaynak kodlu"
     state: "GitHub'da incele"
 
