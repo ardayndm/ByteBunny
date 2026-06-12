@@ -98,7 +98,7 @@ func BuildCommandEmbedFast(s *discordgo.Session,
 	fields ...*discordgo.MessageEmbedField) library.EmbedOptions {
 	embedOpt := library.EmbedOptions{
 		Title:        GetOrDefault(cmd.Titles[titleKey], common.Titles["default"]),
-		Description:  GetOrDefault(cmd.Messages[messageKey], common.Messages["content_error"]),
+		Description:  GetOrDefault(cmd.Messages[messageKey], common.Messages["no_content"]),
 		Color:        color,
 		ThumbnailURL: GetOrDefault(cmd.Icons[iconName], common.Icons["bug"]),
 		FooterText:   customFooterText,

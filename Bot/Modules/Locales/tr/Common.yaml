@@ -205,6 +205,7 @@ messages:
   timeout: "İşlem süresi doldu. Lütfen komutu tekrar dene."
   internal_error: "Sunucu taraflı bir hata oluştu. Bu durum otomatik olarak raporlandı."
   content_error: "İçerik hatası"
+  no_content: "İçerik yok"
 
 # ══════════════════════════════════════════════════════════════════
 #  ZAMAN BİRİMLERİ

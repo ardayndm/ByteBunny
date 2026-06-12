@@ -118,14 +118,6 @@ func GetOptionsExtraMap[T any](c *CommandLib, key string) (map[string]T, bool) {
 	return result, true
 }
 
-// Komut Seçeneklerinden Verilen anahtarı Extra map içinde arar ve döndürür.
-//
-// 	ConvertExtraMap[]() ile kullanılmalı.
-func (c *CommandLib) GetOptionsExtraMap(key string) (map[string]any, bool) {
-	val, ok := c.Options.Extra[key]
-	return val.(map[string]any), ok
-}
-
 // Ekstra alanlardan veri çekerken tip dönüşümlerini yönetir
 func getExtra[T any](c *CommandLib, key string) (val T, ok bool) {
 	v, _ok := c.Options.Extra[key]
