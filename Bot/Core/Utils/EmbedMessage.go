@@ -30,6 +30,36 @@ func (t *Target) GetGuildID() string {
 	return ""
 }
 
+// Tetiklemeyi yapan sunucunun ID'sini döndürür
+func (t *Target) GetUserID() string {
+	if t.Interaction != nil {
+		// Tip Slash komutu
+		return t.Interaction.User.ID
+	}
+
+	if t.Message != nil {
+		// Tip Normal mesaj
+		return t.Message.Author.ID
+	}
+
+	return ""
+}
+
+// Tetiklemeyi yapan sunucunun ID'sini döndürür
+func (t *Target) GetUserName() string {
+	if t.Interaction != nil {
+		// Tip Slash komutu
+		return t.Interaction.User.GlobalName
+	}
+
+	if t.Message != nil {
+		// Tip Normal mesaj
+		return t.Message.Author.GlobalName
+	}
+
+	return ""
+}
+
 // Tetikleme tipine ve kaynağına göre mesajı kanala gönderir
 func SendEmbedToChannel(s *discordgo.Session, t Target, opts library.EmbedOptions, botName string) (err error, ok bool) {
 

@@ -21,16 +21,14 @@
 #  Placeholder olarak kullanılmaz; sabit URL'dir.
 # ══════════════════════════════════════════════════════════════════
 icons:
-  _base: "https://raw.githubusercontent.com/ardayndm/ByteBunny/refs/heads/main/icons/core"
-
-  error: "{_base}/error.png"
-  warning: "{_base}/warning.png"
-  success: "{_base}/success.png"
-  info: "{_base}/info.png"
-  loading: "{_base}/loading.gif"
-  shield: "{_base}/shield.png" # güvenlik / yetkisiz erişim durumları
-  bug: "{_base}/bug.png"
-  bot: "{_base}/bot.png"
+  error: ""
+  warning: ""
+  success: ""
+  info: ""
+  loading: ""
+  shield: ""
+  bug: ""
+  bot: ""
 # ══════════════════════════════════════════════════════════════════
 #  BÖLÜM 2 ▸ EMBED ŞABLONLARI
 #

@@ -34,7 +34,7 @@ func InitConfigApp() error {
 
 	// Log seviye bilgilerini yükle.
 	if logStr, err := utils.ReadFromEnv("LOG_LEVEL"); err == nil {
-		utils.GetLogLevelFromString(logStr)
+		utils.SetAppLogLevel(utils.GetLogLevelFromString(logStr))
 	} else {
 		return err
 	}

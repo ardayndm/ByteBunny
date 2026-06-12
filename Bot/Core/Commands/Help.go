@@ -240,7 +240,8 @@ func sendHelpForCommand(s *discordgo.Session, t utils.Target, cmdName string, he
 
 	if utils.ValidateStringAlphanumeric(cmdName) != nil {
 		// Komut adı Alfanumerik formatta değil , olası saldırı.
-		utils.LogToConsole(utils.DEBUG, fmt.Sprintf("Şüpheli komut adı denemesi: %s", cmdName))
+		utils.LogToConsole(utils.DEBUG, fmt.Sprintf("Şüpheli komut adı denemesi: %s , Kim : %s , KimAdı: %s , GuildID: %s",
+			cmdName, t.GetUserID(), t.GetUserName(), t.GetGuildID()))
 		sendHelpNotFound(s, t, cmdName, helpCmd, keyMap)
 		return
 	}
@@ -299,7 +300,7 @@ func sendHelpForCommand(s *discordgo.Session, t utils.Target, cmdName string, he
 
 // Komut bulunamadı embed'i
 func sendHelpNotFound(s *discordgo.Session, t utils.Target, cmdName string, helpCmd *library.CommandLib, keyMap map[string]string) {
-	val, _ := utils.GetCommonIcon("error")
+	val, _, _ := utils.GetCommonIcon("error")
 	errIcon := utils.GetOrDefault(val, "")
 	keyMap["komut"] = cmdName
 
@@ -367,7 +368,7 @@ func buildCommandDetailFields(targetCmd *library.CommandLib, helpCmd *library.Co
 	if cooldown, ok := targetCmd.GetOptionInt("cooldown"); ok && cooldown > 0 {
 
 		coFields := helpCmd.GetField(3) // Cooldown Fieldi
-		durationUnit, _ := utils.GetCommonDuration("second")
+		durationUnit, _, _ := utils.GetCommonDuration("second")
 		resultText := utils.KeyFormat(coFields.Value, map[string]string{
 			"duration": fmt.Sprintf("%d %s", cooldown, durationUnit.Full),
 		})
