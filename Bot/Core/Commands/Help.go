@@ -105,7 +105,7 @@ func (helpSlash *HelpCommandSlash) GetGeneralFormatKeys(extra ...map[string]stri
 
 // Komut işleyicisi
 func (helpSlash *HelpCommandSlash) Execute(s *discordgo.Session, i *discordgo.InteractionCreate) {
-	if !helpSlash.checkLibrary() {
+	if !helpSlash.checkLibrary() || helpSlash.cmd == nil {
 		utils.LogToConsole(utils.ERROR, "Help: komut kütüphanesi yüklenemedi")
 		return
 	}
@@ -156,7 +156,7 @@ func (helpPrefix *HelpCommandPrefix) LoadCommandLib() error {
 }
 
 func (helpPrefix *HelpCommandPrefix) Execute(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
-	if !helpPrefix.checkLibrary() {
+	if !helpPrefix.checkLibrary() || helpPrefix.cmd == nil {
 		utils.LogToConsole(utils.ERROR, "Help: komut kütüphanesi yüklenemedi")
 		return
 	}
@@ -178,6 +178,20 @@ func (helpPrefix *HelpCommandPrefix) Execute(s *discordgo.Session, m *discordgo.
 
 // ──────────────────────────────────────────────────────────────────────
 // ── İç Mantık ────────────────────────────────────────────────────────────────────
+
+// Verilen komut adını registry de kontrol eder , Eğer bir registry'de bile kayıtlı değilse false döner.
+func isAllowedCommandName(cmdName string) bool {
+
+	// Registry'de de kontrol et — yaml yoksa veya komut kayıtlı değilse hata göster
+	_, slashExists := events.GetRegisteredSlashCommands()[cmdName]
+	_, prefixExists := events.GetRegisteredPrefixCommands()[cmdName]
+
+	if !slashExists && !prefixExists {
+		return false
+	}
+
+	return true
+}
 
 // komut adı boşsa genel bilgi, doluysa o komutun detayını gönderir.
 func helpExecute(s *discordgo.Session, t utils.Target, cmdName string, helpCmd *library.CommandLib) {
@@ -203,10 +217,11 @@ func sendHelpGeneral(s *discordgo.Session, t utils.Target, helpCmd *library.Comm
 		*helpCmd,
 		library.Colors.Status.Info,
 		"info",
-		"info",
+		"general_info",
 		helpCmd.Footers["default"],
 		t.GetGuildID(),
 		infoIcon,
+		keyMap,
 	)
 
 	// Açıklama içindeki {prefix} vb. yerleştir
@@ -219,14 +234,33 @@ func sendHelpGeneral(s *discordgo.Session, t utils.Target, helpCmd *library.Comm
 func sendHelpForCommand(s *discordgo.Session, t utils.Target, cmdName string, helpCmd *library.CommandLib, keyMap map[string]string) {
 	// Komutun kendi yaml'ını yükle
 	var targetLib library.CommandLib
-	path := fmt.Sprintf("Modules/Commands/%s/Commands/Core/%s.yaml", config.AppConfig.Bot.Lang, strings.ToLower(cmdName))
-	ok, err := utils.ReadYaml(path, &targetLib)
+	var isYamlReadOk bool
+	var yamlReadError error
+
+	if utils.ValidateStringAlphanumeric(cmdName) != nil {
+		// Komut adı Alfanumerik formatta değil , olası saldırı.
+		utils.LogToConsole(utils.DEBUG, fmt.Sprintf("Şüpheli komut adı denemesi: %s", cmdName))
+		sendHelpNotFound(s, t, cmdName, helpCmd, keyMap)
+		return
+	}
+
+	// Core komut yolunu dene
+	corePath, err := utils.ValidateCommandYamlFilepathStrict(cmdName, config.AppConfig.Bot.Lang, true)
+	if err == nil {
+		isYamlReadOk, yamlReadError = utils.ReadYaml(corePath, &targetLib)
+	}
+
+	// Core'da bulunamadıysa normal yolunu dene
+	if !isYamlReadOk {
+		normalPath, err := utils.ValidateCommandYamlFilepathStrict(cmdName, config.AppConfig.Bot.Lang, false)
+		if err == nil {
+			isYamlReadOk, yamlReadError = utils.ReadYaml(normalPath, &targetLib)
+		}
+	}
 
 	// Registry'de de kontrol et — yaml yoksa veya komut kayıtlı değilse hata göster
-	_, slashExists := events.GetRegisteredSlashCommands()[cmdName]
-	_, prefixExists := events.GetRegisteredPrefixCommands()[cmdName]
-
-	if err != nil || !ok || (!slashExists && !prefixExists) {
+	if yamlReadError != nil || !isYamlReadOk || !isAllowedCommandName(cmdName) {
+		utils.LogToConsole(utils.DEBUG, fmt.Sprintf("Şüpheli komut denemesi (Komut Registry'de kayıtlı değil): %s", cmdName))
 		sendHelpNotFound(s, t, cmdName, helpCmd, keyMap)
 		return
 	}
@@ -245,6 +279,7 @@ func sendHelpForCommand(s *discordgo.Session, t utils.Target, cmdName string, he
 		config.AppConfig.Bot.Name,
 		t.GetGuildID(),
 		infoIcon,
+		keyMap,
 		fields...,
 	)
 
@@ -252,7 +287,12 @@ func sendHelpForCommand(s *discordgo.Session, t utils.Target, cmdName string, he
 	embedOpts.Title = targetLib.GetTitle("info", helpCmd.GetTitle("info", "📖 Komut Bilgisi"))
 	embedOpts.Description = utils.KeyFormat(targetLib.Description, keyMap)
 
-	utils.SendEmbedToChannel(s, t, embedOpts, config.AppConfig.Bot.Name)
+	if t.Interaction != nil {
+		utils.SendEmbedToChannel(s, t, embedOpts, config.AppConfig.Bot.Name)
+	} else {
+		utils.SendEmbedReplyToChannel(s, t.Message, embedOpts, config.AppConfig.Bot.Name)
+	}
+
 }
 
 // Komut bulunamadı embed'i
@@ -270,10 +310,15 @@ func sendHelpNotFound(s *discordgo.Session, t utils.Target, cmdName string, help
 		config.AppConfig.Bot.Name,
 		t.GetGuildID(),
 		errIcon,
+		keyMap,
 	)
 	embedOpts.Description = utils.KeyFormat(embedOpts.Description, keyMap)
 
-	utils.SendEmbedToChannel(s, t, embedOpts, config.AppConfig.Bot.Name)
+	if t.Interaction != nil {
+		utils.SendEmbedToChannel(s, t, embedOpts, config.AppConfig.Bot.Name)
+	} else {
+		utils.SendEmbedReplyToChannel(s, t.Message, embedOpts, config.AppConfig.Bot.Name)
+	}
 }
 
 // Komutun usage, examples field'lerini oluşturur

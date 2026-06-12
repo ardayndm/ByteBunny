@@ -2,16 +2,17 @@ package library
 
 // Komut şablonu.
 type CommandLib struct {
-	Name        string            `yaml:"name"`
-	Description string            `yaml:"description"`
-	Usage       string            `yaml:"usage"`
-	Examples    map[string]string `yaml:"examples"`
-	Titles      map[string]string `yaml:"titles"`
-	Messages    map[string]string `yaml:"messages"`
-	Icons       map[string]string `yaml:"icons"`
-	Options     CommandOptions    `yaml:"options"`
-	Fields      []CommandField    `yaml:"fields,omitempty"`
-	Footers     map[string]string `yaml:"footers,omitempty"`
+	Name          string            `yaml:"name"`
+	Description   string            `yaml:"description"`
+	Usage         string            `yaml:"usage"`
+	Examples      map[string]string `yaml:"examples"`
+	Titles        map[string]string `yaml:"titles"`
+	Messages      map[string]string `yaml:"messages"`
+	Icons         map[string]string `yaml:"icons"`
+	Options       CommandOptions    `yaml:"options"`
+	Fields        []CommandField    `yaml:"fields,omitempty"`
+	Footers       map[string]string `yaml:"footers,omitempty"`
+	IsCoreCommand bool              // YAML dan okunmaz , komutlar oluşturulurken doldurulur. Sistem komutları ile Modül komutlarını ayırmak için kullanılır.
 }
 
 // Komut şablonu içerisindeki Fields alanı şablonu.
