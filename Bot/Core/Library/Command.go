@@ -2,16 +2,17 @@ package library
 
 // Komut şablonu.
 type CommandLib struct {
-	Name        string            `yaml:"name"`
-	Description string            `yaml:"description"`
-	Usage       string            `yaml:"usage"`
-	Examples    map[string]string `yaml:"examples"`
-	Titles      map[string]string `yaml:"titles"`
-	Messages    map[string]string `yaml:"messages"`
-	Icons       map[string]string `yaml:"icons"`
-	Options     CommandOptions    `yaml:"options"`
-	Fields      []CommandField    `yaml:"fields,omitempty"`
-	Footers     map[string]string `yaml:"footers,omitempty"`
+	Name          string            `yaml:"name"`
+	Description   string            `yaml:"description"`
+	Usage         string            `yaml:"usage"`
+	Examples      map[string]string `yaml:"examples"`
+	Titles        map[string]string `yaml:"titles"`
+	Messages      map[string]string `yaml:"messages"`
+	Icons         map[string]string `yaml:"icons"`
+	Options       CommandOptions    `yaml:"options"`
+	Fields        []CommandField    `yaml:"fields,omitempty"`
+	Footers       map[string]string `yaml:"footers,omitempty"`
+	IsCoreCommand bool              // YAML dan okunmaz , komutlar oluşturulurken doldurulur. Sistem komutları ile Modül komutlarını ayırmak için kullanılır.
 }
 
 // Komut şablonu içerisindeki Fields alanı şablonu.
@@ -116,14 +117,6 @@ func GetOptionsExtraMap[T any](c *CommandLib, key string) (map[string]T, bool) {
 		}
 	}
 	return result, true
-}
-
-// Komut Seçeneklerinden Verilen anahtarı Extra map içinde arar ve döndürür.
-//
-// 	ConvertExtraMap[]() ile kullanılmalı.
-func (c *CommandLib) GetOptionsExtraMap(key string) (map[string]any, bool) {
-	val, ok := c.Options.Extra[key]
-	return val.(map[string]any), ok
 }
 
 // Ekstra alanlardan veri çekerken tip dönüşümlerini yönetir

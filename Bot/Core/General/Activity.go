@@ -18,7 +18,7 @@ func initPresenceConfig(lang string) *library.PresenceConfig {
 
 	var cfg library.PresenceConfig
 
-	path := fmt.Sprintf("Core/Locale/%s/Activity.yaml", lang)
+	path := fmt.Sprintf("Modules/Locales/%s/Activity.yaml", lang)
 
 	if ok, err := utils.ReadYaml(path, &cfg); err != nil || !ok {
 		utils.LogToConsole(utils.ERROR, "Activity.yaml dosyası okunamadı.")

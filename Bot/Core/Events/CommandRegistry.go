@@ -32,10 +32,12 @@ type PrefixCommand interface {
 }
 
 var (
-	slashRegistry  = make(map[string]SlashCommand)
-	prefixRegistry = make(map[string]PrefixCommand)
-	slashMutex     sync.RWMutex
-	prefixMutex    sync.RWMutex
+	slashRegistry           = make(map[string]SlashCommand)
+	prefixRegistry          = make(map[string]PrefixCommand)
+	loadCacheSlashRegistry  []SlashCommand  // Init işlemlerinden sonra registrye almak için bir cache
+	loadCachePrefixRegistry []PrefixCommand // Init işlemlerinden sonra registrye almak için bir cache
+	slashMutex              sync.RWMutex
+	prefixMutex             sync.RWMutex
 )
 
 // Sisteme kayıtlı olan Slash komutlarını döndürür.
@@ -61,20 +63,49 @@ func GetRegisteredPrefixCommands() map[string]PrefixCommand {
 }
 
 // Sisteme Slash komutu kaydeder.
-func RegisterSlashCommand(cmd SlashCommand) {
+func registerSlashCommand(cmd SlashCommand) {
 	slashMutex.Lock()
 	defer slashMutex.Unlock()
 	slashRegistry[cmd.Name()] = cmd
-	utils.LogToConsole(utils.DEBUG, "Slash komutu kaydedildi: "+config.AppConfig.Bot.Prefix+cmd.Name())
+	utils.LogToConsole(utils.DEBUG, "Slash komutu Cache'den alınıp Sisteme kaydedildi: "+"/"+cmd.Name())
 }
 
 // Sisteme Prefix komutu kaydeder.
-func RegisterPrefixCommand(cmd PrefixCommand) {
+func registerPrefixCommand(cmd PrefixCommand) {
 	prefixMutex.Lock()
 	defer prefixMutex.Unlock()
 	prefixRegistry[cmd.Name()] = cmd
 
-	utils.LogToConsole(utils.DEBUG, "Prefix komutu kaydedildi: "+config.AppConfig.Bot.Prefix+cmd.Name())
+	utils.LogToConsole(utils.DEBUG, "Prefix komutu Cache'den alınıp Sisteme kaydedildi: "+config.AppConfig.Bot.Prefix+cmd.Name())
+}
+
+// Cache içindeki tüm komutları Kayıt listesine yükler.
+func LoadAllRegistryCommands() {
+
+	for _, fn := range loadCacheSlashRegistry {
+		registerSlashCommand(fn)
+	}
+
+	for _, fn := range loadCachePrefixRegistry {
+		registerPrefixCommand(fn)
+	}
+}
+
+// Sisteme Slash komutu kaydeder.
+func RegisterSlashCacheCommand(cmd SlashCommand) {
+	slashMutex.Lock()
+	defer slashMutex.Unlock()
+	loadCacheSlashRegistry = append(loadCacheSlashRegistry, cmd)
+	utils.LogToConsole(utils.DEBUG, "Slash komutu cache'e alındı")
+}
+
+// Sisteme Prefix komutu kaydeder.
+func RegisterPrefixCacheCommand(cmd PrefixCommand) {
+	prefixMutex.Lock()
+	defer prefixMutex.Unlock()
+	loadCachePrefixRegistry = append(loadCachePrefixRegistry, cmd)
+
+	utils.LogToConsole(utils.DEBUG, "Prefix komutu cache'e alındı")
 }
 
 // Sisteme kayıt edilen Slash komutlarını discorda gönderir ve kayıt ettirir.

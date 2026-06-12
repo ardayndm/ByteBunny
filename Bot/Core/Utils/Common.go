@@ -3,7 +3,6 @@ package utils
 import (
 	library "ByteBunny/Bot/Core/Library"
 	"fmt"
-	"os"
 )
 
 var common *library.CommonLib
@@ -26,13 +25,13 @@ func InitCommonDecoder(path string) error {
 // Örnek:
 //
 //	tmpl, ok := utils.GetTemplate("error")
-func GetCommonTemplate(key string) (template library.EmbedTemplate, ok bool) {
+func GetCommonTemplate(key string) (template library.EmbedTemplate, ok bool, e error) {
 	if common == nil {
 		LogToConsole(ERROR, "CommonDecoder: InitCommonDecoder henüz çağrılmadı")
-		os.Exit(1)
+		return library.EmbedTemplate{}, false, fmt.Errorf("CommonDecoder: InitCommonDecoder henüz çağrılmadı")
 	}
 	tmpl, ok := common.Templates[key]
-	return tmpl, ok
+	return tmpl, ok, nil
 }
 
 // commands altındaki bir embed şablonunu döner.
@@ -40,51 +39,52 @@ func GetCommonTemplate(key string) (template library.EmbedTemplate, ok bool) {
 // Örnek:
 //
 //	tmpl, ok := utils.GetCommand("cooldown")
-func GetCommonCommand(key string) (template library.EmbedTemplate, ok bool) {
+func GetCommonCommand(key string) (template library.EmbedTemplate, ok bool, e error) {
 	if common == nil {
 		LogToConsole(ERROR, "CommonDecoder: InitCommonDecoder henüz çağrılmadı")
-		os.Exit(1)
+		return library.EmbedTemplate{}, false, fmt.Errorf("CommonDecoder: InitCommonDecoder henüz çağrılmadı")
 	}
 	tmpl, ok := common.Commands[key]
-	return tmpl, ok
+	return tmpl, ok, nil
 }
 
 // titles altındaki varsayılan başlığı döner.
-func GetCommonTitle(key string) (value string, ok bool) {
+func GetCommonTitle(key string) (value string, ok bool, e error) {
 	if common == nil {
 		LogToConsole(ERROR, "CommonDecoder: InitCommonDecoder henüz çağrılmadı")
-		os.Exit(1)
+		return "", false, fmt.Errorf("CommonDecoder: InitCommonDecoder henüz çağrılmadı")
+
 	}
 	title, ok := common.Titles[key]
-	return title, ok
+	return title, ok, nil
 }
 
 // messages altındaki varsayılan mesajı döner.
-func GetCommonMessage(key string) (value string, ok bool) {
+func GetCommonMessage(key string) (value string, ok bool, e error) {
 	if common == nil {
 		LogToConsole(ERROR, "CommonDecoder: InitCommonDecoder henüz çağrılmadı")
-		os.Exit(1)
+		return "", false, fmt.Errorf("CommonDecoder: InitCommonDecoder henüz çağrılmadı")
 	}
 	msg, ok := common.Messages[key]
-	return msg, ok
+	return msg, ok, nil
 }
 
 // icons altındaki URL'yi döner.
-func GetCommonIcon(key string) (value string, ok bool) {
+func GetCommonIcon(key string) (value string, ok bool, e error) {
 	if common == nil {
 		LogToConsole(ERROR, "CommonDecoder: InitCommonDecoder henüz çağrılmadı")
-		os.Exit(1)
+		return "", false, fmt.Errorf("CommonDecoder: InitCommonDecoder henüz çağrılmadı")
 	}
 	url, ok := common.Icons[key]
-	return url, ok
+	return url, ok, nil
 }
 
 // duration altındaki zaman birimini döner.
-func GetCommonDuration(key string) (unit library.DurationUnit, ok bool) {
+func GetCommonDuration(key string) (unit library.DurationUnit, ok bool, e error) {
 	if common == nil {
 		LogToConsole(ERROR, "CommonDecoder: InitCommonDecoder henüz çağrılmadı")
-		os.Exit(1)
+		return library.DurationUnit{}, false, fmt.Errorf("CommonDecoder: InitCommonDecoder henüz çağrılmadı")
 	}
 	d, ok := common.Duration[key]
-	return d, ok
+	return d, ok, nil
 }

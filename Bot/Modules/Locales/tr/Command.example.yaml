@@ -3,11 +3,12 @@
 # ==============================================================================
 #
 # Yeni bir komut yazarken bu dosyayı kopyala ve bu yapıyı kullan
+# ! Komut adı ile yaml dosyasının adı aynı olması zorunludur, aksi takdirde komut help vb. tarafından çalıştırılamaz.
 #
 # ==============================================================================
 
 # ── Meta ──────────────────────────────────────────────────────────
-name: "komut_adi"
+name: "komut_adi" # Dosya adı ile aynı olmak zorunda ki help vb. gibi komutlar tarafından görülebilsin. isim değişirse dosya adı da değişmeli.
 description: "Komutun ne yaptığını açıklayan kısa bir metin."
 usage: "komut_adi <zorunlu> [opsiyonel]"
 

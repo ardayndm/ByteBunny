@@ -94,11 +94,14 @@ func BuildCommonEmbedFast(s *discordgo.Session, color int, title, message, custo
 //	Önceliği Komut ile yapmaya çalışır , hata oluşursa fallback olarak Common'a başvurur
 func BuildCommandEmbedFast(s *discordgo.Session,
 	cmd library.CommandLib, color int, titleKey, messageKey,
-	customFooterText, guildId, iconName string,
+	customFooterText, guildId, iconName string, keyMap map[string]string,
 	fields ...*discordgo.MessageEmbedField) library.EmbedOptions {
+
+	title := KeyFormat(GetOrDefault(cmd.Titles[titleKey], common.Titles["default"]), keyMap)
+	desc := KeyFormat(GetOrDefault(cmd.Messages[messageKey], common.Messages["no_content"]), keyMap)
 	embedOpt := library.EmbedOptions{
-		Title:        GetOrDefault(cmd.Titles[titleKey], common.Titles["default"]),
-		Description:  GetOrDefault(cmd.Messages[messageKey], common.Messages["content_error"]),
+		Title:        title,
+		Description:  desc,
 		Color:        color,
 		ThumbnailURL: GetOrDefault(cmd.Icons[iconName], common.Icons["bug"]),
 		FooterText:   customFooterText,
@@ -126,6 +129,20 @@ func RebuildCommandField(field *library.CommandField) *discordgo.MessageEmbedFie
 		Value:  field.Value,
 		Inline: field.Inline,
 	}
+}
+
+// Hızlı şekilde Komut için Field alanlarını discord'a göre düzenler
+func RebuildCommandFields(fields ...*library.CommandField) []*discordgo.MessageEmbedField {
+	var list []*discordgo.MessageEmbedField
+
+	for _, f := range fields {
+		list = append(list, &discordgo.MessageEmbedField{
+			Name:   f.Name,
+			Value:  f.Value,
+			Inline: f.Inline,
+		})
+	}
+	return list
 }
 
 // (internal) | Verilen Embed mesaj içeriğindeki URL adreslerini kontrol eder ve ayıklar
