@@ -6,6 +6,7 @@ import (
 	library "ByteBunny/Bot/Core/Library"
 	utils "ByteBunny/Bot/Core/Utils"
 	"fmt"
+	"path/filepath"
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
@@ -26,7 +27,7 @@ func init() {
 
 func loadHelpLib() (*library.CommandLib, error) {
 	var lib library.CommandLib
-	path := fmt.Sprintf("Modules/Locales/%s/Commands/Core/help.yaml", config.AppConfig.Bot.Lang)
+	path := filepath.Join("Modules", "Locales", config.AppConfig.Bot.Lang, "Commands", "Core", "help.yaml")
 	ok, err := utils.ReadYaml(path, &lib)
 	if err != nil || !ok {
 		return nil, err

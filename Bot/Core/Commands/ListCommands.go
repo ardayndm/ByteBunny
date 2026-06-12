@@ -6,6 +6,7 @@ import (
 	library "ByteBunny/Bot/Core/Library"
 	utils "ByteBunny/Bot/Core/Utils"
 	"fmt"
+	"path/filepath"
 	"sort"
 	"strconv"
 	"strings"
@@ -28,7 +29,7 @@ func init() {
 
 func loadListCommandsLib() (*library.CommandLib, error) {
 	var lib library.CommandLib
-	path := fmt.Sprintf("Modules/Locales/%s/Commands/Core/listcommands.yaml", config.AppConfig.Bot.Lang)
+	path := filepath.Join("Modules", "Locales", config.AppConfig.Bot.Lang, "Commands", "Core", "listcommands.yaml")
 	ok, err := utils.ReadYaml(path, &lib)
 	if err != nil || !ok {
 		return nil, err
