@@ -20,17 +20,17 @@ jobs:
             --arg repo "${{ github.repository }}" \
             '{
               username: "ByteBunny Duyuru",
-              avatar_url: "https://raw.githubusercontent.com/ardayndm/ByteBunny/main/assets/logo.png",
+              avatar_url: "https://github.com/ardayndm/ByteBunny/blob/main/Images/Bot/ByteBunny-Logo.jpg?raw=true",
               content: "@everyone Depoya yeni bir güncelleme geldi! 👇",
               embeds: [{
                 author: {
                   name: "🚀 ByteBunny Yayında!",
-                  icon_url: "https://raw.githubusercontent.com/ardayndm/ByteBunny/main/assets/logo.png"
+                  icon_url: "https://github.com/ardayndm/ByteBunny/blob/main/Images/Bot/ByteBunny-Logo.jpg?raw=true"
                 },
                 description: ("Merhaba arkadaşlar!\n\n**" + $author + "** tarafından **" + $branch + "** dalına yeni bir kod gönderildi.\n\n**📝 Commit Mesajı:**\n> " + $msg + "\n\n**🔗 Detaylar:**\n[Değişiklikleri İncele](" + $url + ")"),
                 color: 5793266,
                 image: {
-                  url: "https://raw.githubusercontent.com/ardayndm/ByteBunny/main/assets/banner.png"
+                  url: "https://github.com/ardayndm/ByteBunny/blob/main/Images/Bot/ByteBunny-Banner.png?raw=true"
                 },
                 footer: {
                   text: ("📦 " + $repo + " • Görüş ve katkılarınızı bekliyoruz!")
